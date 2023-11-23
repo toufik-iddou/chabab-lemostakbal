@@ -1,0 +1,15 @@
+POST http://localhost/chabab-elmostakbal/controllers/auth/register.php HTTP/1.1
+content-type: application/json
+
+{
+    "userName" :"toufik_iddou" ,
+    "password" : "toufik",
+    "firstName" :"toufik" ,
+    "lastName" : "iddou",
+    "address" : "dergana",
+    "gender" : 0,
+    "birthDate" : "Wed, 21 Oct 2015 18:27:50 GMT" ,
+    "salary" :100 ,
+    "role" : 0,
+    "level" : 0,
+}
