@@ -9,9 +9,10 @@ abstract class Client extends User{
         string $lastName, 
         string $address, 
         String $gender,
-        $birthDate
+        $birthDate,
+        string $image,
     ){
-        parent::__construct($id, $firstName, $lastName, $address, $gender, $birthDate );
+        parent::__construct($id, $firstName, $lastName, $address, $gender, $birthDate,$image );
     }
 
     // getter and setter methods

@@ -2,6 +2,8 @@
 require_once  'user.php';
 abstract class Employee extends User{
     protected float $salary;
+    protected String $email;
+    protected String $phone;
 
     public function __construct(
         int $id, 
@@ -10,10 +12,15 @@ abstract class Employee extends User{
         string $address, 
         String $gender, 
         $birthDate,
-        int $salary
+        String $image,
+        String $email,
+        String $phone,
+        int $salary,
     ){
-        parent::__construct($id, $firstName, $lastName, $address, $gender, $birthDate);
+        parent::__construct($id, $firstName, $lastName, $address, $gender, $birthDate,$image);
         $this->salary = $salary;
+        $this->email = $email;
+        $this->phone = $phone;
     }
 
     // getter and setter methods

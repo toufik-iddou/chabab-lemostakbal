@@ -3,6 +3,7 @@ require_once  'person.php';
 abstract class User extends Person
 {
     protected $birthDate;
+    protected String $image;
 
     protected Credential $credential;
 
@@ -13,9 +14,11 @@ abstract class User extends Person
         string $address,
         String $gender,
         $birthDate,
+        String $image,
     ) {
         parent::__construct($id, $firstName, $lastName, $address, $gender);
         $this->birthDate = $birthDate;
+        $this->image = $image;
     }
 
     // getter and setter methods
@@ -26,6 +29,10 @@ abstract class User extends Person
     public function getBirthDate(): string
     {
         return $this->birthDate;
+    }
+    public function getImage(): string
+    {
+        return $this->image;
     }
     public function getCredential(): Credential
     {

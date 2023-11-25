@@ -4,7 +4,10 @@ class Credential {
     private String $userName;
     private String $role;
 
-    public function __construct($id,$userName,$role) {
+    public function __construct(
+        int $id,
+        String $userName,
+        String $role) {
         $this->id = $id;
         $this->userName = $userName;
         $this->role = $role;
@@ -36,6 +39,16 @@ class Credential {
         $conn->close();
         
         return $credentialId;
+    }
+    public static function registerWithId($id,$userName, $pw, $role): int {
+        require '../../services/connect.php';
+        $hashedPassword = password_hash($pw, PASSWORD_DEFAULT);
+        
+        $sql = "INSERT INTO credentials (`id` ,`userName`, `password`, `role`) VALUES ($id, '$userName', '$hashedPassword', '$role' )";
+        $res = $conn->query($sql) ;
+        $conn->close();
+        
+        return $id;
     }
     
     public static function login($userName,$pw):Credential|null{

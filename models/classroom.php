@@ -2,7 +2,8 @@
 
 require_once  'sitter.php';
 require_once  'kid.php';
-class Classroom{
+require_once  'db_object.php';
+class Classroom implements IDbObject {
     private Sitter $sitter ;
     private array $kids ;
     private int $id;
@@ -17,7 +18,7 @@ class Classroom{
      $this->id =$id;
      $this->name =$name;
      $this->level =$level;
-     $this->sitter= new Sitter($sitterId,null,null,null,null,null,-1);
+     $this->sitter= new Sitter($sitterId,"","","","","","","","",-1);
     }
 
     // getter and setter methods
@@ -57,33 +58,72 @@ class Classroom{
             }
         }
         //db connection
-        public static function create($data):bool{
+        public static function create($data){
             require __DIR__ . '/../services/connect.php';
-            $sql = "INSERT INTO classroom ( `name`)
-            VALUES ('".$data['name'].")";
+            $sql = "INSERT INTO classrooms (`name`,`sitter`,`level`)
+            VALUES ('".$data['name']."','".$data['sitter']."','".$data['level']."')";
             $res = $conn->query($sql) ;
             $conn->close();
             return $res=== TRUE;
         }
         public static function findByiId($id){
-    
-        }
-       
-        public function save():bool{
             require __DIR__ . '/../services/connect.php';
-            $birthDate = date_format($this->birthDate,'Y-m-d');
-            $sql = "INSERT INTO classroom (firstName,lastName,'address',gender,birthDate,'level',credentialId)
-            VALUES ('$this->firstName','$this->lastName','$this->address','$this->gender','$birthDate','$data->level',$this->credentialId)";
-            $res = $conn->query($sql) ;
-            $conn->close();
-            return $res=== TRUE;
-        }
+            $sql = "SELECT * FROM classrooms WHERE id=$id";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $classroom = new Classroom(
+                        $row['id'],
+                        $row['name'],
+                        $row['level'],
+                        $row['sitter'],
+                    );
+                    $conn->close();
+                    return $classroom;
+                }
+            }else{
+                $conn->close();
+                return null;
+            } 
+           }
+       public static function findWhere($query):array{
+        require __DIR__ . '/../services/connect.php';
+        $sql = "SELECT * FROM classrooms WHERE $query ORDER BY created_at DESC;";
+        $result = $conn->query($sql);
+        $classrooms = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $classroom = new Classroom(
+                    $row['id'],
+                    $row['name'],
+                    $row['level'],
+                    $row['sitter'],
+                );
+                array_push($classrooms,$classroom);
+            }
+        } 
+        $conn->close();
+        return $classrooms;
+       }
+       public function update():bool{
+        require __DIR__ . '/../services/connect.php';
+        $sql = "UPDATE `classrooms` SET `name`='".$this->name."',`sitter`='".$this->sitter->getId()."',`level`='".$this->level."' WHERE id= ".$this->id;
+        $res = $conn->query($sql) ;
+        $conn->close();
+        return $res=== TRUE;
+    }
         public function delete():bool{
             require __DIR__ . '/../services/connect.php';
-            $sql = "DELETE FROM classroom WHERE id='$this->id'";
+            $sql = "DELETE FROM classrooms WHERE id='$this->id'";
             $res = $conn->query($sql) ;
             $conn->close();       
             return $res;
         }
-    
+        public static function deleteById($id):bool{
+            require __DIR__ . '/../services/connect.php';
+            $sql = "DELETE FROM classrooms WHERE id='$id'";
+            $res = $conn->query($sql) ;
+            $conn->close();       
+            return $res;
+        }
 }

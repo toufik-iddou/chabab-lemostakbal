@@ -1,5 +1,6 @@
 <?php
-abstract class Person
+require_once "db_object.php";
+abstract class Person implements IDbObject
 {
     protected int $id;
     protected string $firstName;
@@ -27,7 +28,7 @@ abstract class Person
     {
         return $this->id;
     }
-    public function getFirsName(): string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -45,11 +46,7 @@ abstract class Person
     }
 
     // db connection
-    abstract public static function create($data): bool;
-    
-    abstract public static function findByiId($id);
-    abstract public function save(): bool;
-    abstract public function delete(): bool;
+
 
 
 }

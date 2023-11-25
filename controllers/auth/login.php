@@ -6,8 +6,8 @@ require_once  '../../models/sitter.php';
 require_once  '../../models/child-parent.php';
 function post()
 {
-    
     require_once __DIR__ . '/../../utils/statics.php';
+    
     $userName = $_POST['userName'];
     $pw = $_POST['password'];
     

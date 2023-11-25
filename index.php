@@ -1,56 +1,33 @@
-
 <?php
+// index.php
 
+// Get the requested URL
+$request_uri = $_SERVER['REQUEST_URI'];
 
-?> 
-<?php
+// Define your dynamic routes
+$dynamic_routes = [
+    '/user/(\d+)' => 'user.php?id=$1',
+    '/post/(\w+)' => 'post.php?slug=$1',
+];
 
-?>
-<html>
-<body>
+// Check if the requested URL matches a dynamic route
+foreach ($dynamic_routes as $pattern => $destination) {
+    if (preg_match("#^$pattern$#", $request_uri, $matches)) {
+        // Extract parameters from the URL
+        array_shift($matches); // Remove the full match
+        $params = $matches;
 
-<?php
+        // Include the corresponding file with parameters
+        include str_replace('$', '', preg_replace_callback('/\$(\d+)/', function($matches) use ($params) {
+            return $params[$matches[1] - 1];
+        }, $destination));
 
-
-
-
-
-// if(!isset($_COOKIE[$cookie_name])) {
-//   echo "Cookie named '" . $cookie_name . "' is not set!";
-// } else {
-//   echo "Cookie '" . $cookie_name . "' is set!<br>";
-//   echo "Value is: " . $_COOKIE[$cookie_name];
-//   echo "Value is: " . $_COOKIE["id"];
-// }
-?>
-
-<?php
- 
-class c1{
-    protected int $i;
-    public function __construct(int $i){
-      $this->$i=$i;
-      if($this instanceof c2) {
-        echo "the obj is c2";
-      }else{
-        echo "the obj is just c1";
-      }
-     $this->i=10;
+        // Stop further processing
+        exit();
     }
-}
+} 
 
-class c2 extends c1{
-    public function __construct(){
-        parent::__construct(0);
-       
-        echo $this->i;
-    }
-    
-}
-
-new c1(null);
-
+// If no matching dynamic route is found, handle it as a 404 error
+http_response_code(404);
+echo '404 Not Found';
 ?>
-
-</body>
-</html>

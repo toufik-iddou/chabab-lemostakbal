@@ -7,7 +7,7 @@ class KidLevel
     const C = 'C';
     const D = 'D';
     
-    const values =["a","b","c","d"];
+    const values =["A","B","C","D"];
     static function isValid($level):bool{
         return in_array($level,self::values);
     }
@@ -49,7 +49,18 @@ Class Role
     const ADMIN="admin";
     const SITTER="sitter";
     const KID="kid";
-    const PARENT="parent";
-const values =["admin","sitter","kid","parent"];
+const values =["admin","sitter","kid"];
+};?>
+
+
+<?php
+Class Day
+{
+    const SUN="sunday";
+    const MON="monday";
+    const TUE="tuesday";
+    const WED="wednesday";
+    const THU="thursday";
+const values =['sunday','monday','tuesday','wednesday','thursday'];
 };?>
 
