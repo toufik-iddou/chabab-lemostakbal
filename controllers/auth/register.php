@@ -72,10 +72,6 @@ function post()
                 exit;
             }
         }
-    } else {
-        // Display an error if the form was not submitted properly
-        echo "Error: Invalid form submission.";
-        exit;
     }
     
     
@@ -107,7 +103,9 @@ $data = array(
   );
 
 
-
+echo "<br>
+$role
+<br>";
     switch ($role) {
         case Role::ADMIN:
             Admin::create($data);
@@ -124,6 +122,7 @@ $data = array(
                 "email"=>$pEmail,
                 "phone"=>$pPhone,      
                 );
+                print_r($pData);
                 $pid = ChildParent::create($pData);
                 $data["parent"]=$pid;
                 Kid::create($data);
@@ -134,7 +133,7 @@ $data = array(
     }
 
     echo json_encode(array("status" => 200, "message" => "user created successfully "));
-    header('Location: ' . "../../views/login.php");
+    // header('Location: ' . "../../views/members.php");
     exit;
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

@@ -1,3 +1,13 @@
+<?php
+
+if (isset($_COOKIE['role'])) {
+    $cookieRole = $_COOKIE['role'];
+} else {
+    // header('Location: ' . "./index.html");
+            exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,11 +42,15 @@
             <div class="menu-contain">
                 <p class="header">Menu</p>
                 <ul>
-                    <li class="active"><a href="#"><i class="fas fa-users"></i>Members</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-week"></i>Classes</a></li>
-                    <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>
-                    <li><a href="#"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                <?php
+                // if($cookieRole=="admin"){
+                    // echo '<li class="active"><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
+                // }
+                ?>    
+                    <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
+                    <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
+                    <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
+                    <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
                 </ul>
             </div>
             <div class="menu-contain">
@@ -52,7 +66,7 @@
         <div class="content">
             <div class="title">
                 <div class="back">
-                    <a href="members.html"><i class="fa-solid fa-angle-left"></i></a>
+                    <a href="members.php"><i class="fa-solid fa-angle-left"></i></a>
                     <h1>Add Person:</h1>
                 </div>
                 <i class="fas fa-cog"></i>
@@ -60,23 +74,23 @@
             </div>
             <div class="add-details">
                 <div class="form-container">
-                    <form action="">
+                    <form action="../controllers/auth/register.php" method="post" enctype="multipart/form-data">
                         <div class="part-one">
                             <div class="name">
                                 <div class="input-field">
-                                    <label for="firstname">First Name:</label> <br>
-                                    <input type="text" id="firstname" name="firstname" placeholder="Ex : John">
+                                    <label for="firstName">First Name:</label> <br>
+                                    <input type="text" id="firstName" name="firstName" placeholder="Ex : John">
                                 </div>
                                 <div class="input-field">
-                                    <label for="lastname">Last Name:</label><br>
-                                    <input type="text" name="lastname" placeholder="Ex : Doe">
+                                    <label for="lastName">Last Name:</label><br>
+                                    <input type="text" name="lastName" placeholder="Ex : Doe">
                                 </div>
 
                             </div>
                             <div class="birth-gender">
                                 <div class="input-field">
-                                    <label for="birthday">Birthday:</label><br>
-                                    <input type="text" name="birthday" placeholder="DD/MM/YYYY">
+                                    <label for="birthDate">Birthday:</label><br>
+                                    <input type="date" name="birthDate" >
                                 </div>
                                 <div class="gender">
                                     <p>Gender:</p>
@@ -111,16 +125,17 @@
                             </div>
                             <div class="name">
                                 <div class="input-field">
-                                    <label for="username">Username:</label> <br>
-                                    <input type="text" name="username" placeholder="Ex : john_Doe_19">
+                                    <label for="userName">Username:</label> <br>
+                                    <input type="text" name="userName" placeholder="Ex : john_Doe_19">
                                 </div>
                                 <div class="input-field">
-                                    <label for="id">User ID:</label><br>
-                                    <input type="text" name="id" placeholder="Ex : A1Z2E3R4">
+                                    <label for="id">User ID:</label> <label  style="padding:1px 10px; margin-left:20px;border:0.5px solid gray;cursor:pointer" onclick="connect()">Scan Card</label>
+                                    <br>
+                                    <input type="text" name="id" id="id" placeholder="Ex : A1Z2E3R4">
                                 </div>
                             </div>
                             <div class="name">
-                                <div class="input-field">
+                                <div class="input-field" id="sal-email">
                                     <label for="email">Email:</label><br>
                                     <input type="text" id="email" name="email" placeholder="Ex :azerty@gmail.com">
                                 </div>
@@ -132,7 +147,7 @@
                             <div class="role-img">
                                 <div class="role">
                                     <label for="role">Role:</label>
-                                    <select id="role" onchange="
+                                    <select id="role"  name="role" onchange="
                                         showHideElementPhone();   
                                         showHideElement()          
                                 ">
@@ -143,10 +158,10 @@
                                 </div>
                                 <div class="img">
                                     <label for="">Image:</label>
-                                    <label for="image" class="custom-file-input">Click to choose</label>
-                                    <input type="text" id="fileInput" class="file-name" readonly>
+                                    <label for="file" class="custom-file-input">Click to choose</label>
+                                        <input type="text" id="fileInput" class="file-name" readonly>
 
-                                    <input type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
+                                    <input type="file" id="file" name="file" accept=".jpg, .jpeg, .png">
                                 </div>
                             </div>
                             <div id="parent-part" class="parent-part">
@@ -155,20 +170,17 @@
 
                                 <div class="name">
                                     <div class="input-field">
-                                        <label for="p-firstname">First Name:</label> <br>
-                                        <input type="text" id="p-firstname" name="p-firstname" placeholder="Ex : John">
+                                        <label for="p-firstName">First Name:</label> <br>
+                                        <input type="text" id="p-firstName" name="p-firstName" placeholder="Ex : John">
                                     </div>
                                     <div class="input-field">
-                                        <label for="p-lastname">Last Name:</label><br>
-                                        <input type="text" name="p-lastname" placeholder="Ex : Doe">
+                                        <label for="p-lastName">Last Name:</label><br>
+                                        <input type="text" name="p-lastName" placeholder="Ex : Doe">
                                     </div>
 
                                 </div>
                                 <div class="birth-gender">
-                                    <div class="input-field">
-                                        <label for="p-birthday">Birthday:</label><br>
-                                        <input type="text" name="p-birthday" placeholder="DD/MM/YYYY">
-                                    </div>
+                                  <div></div>
                                     <div class="gender">
                                         <p>Gender:</p>
                                         <div class="input-field">
@@ -197,7 +209,7 @@
                                     </div>
                                     <div class="input-field">
                                         <label for="p-phone">Phone:</label> <br>
-                                        <input type="text" id="phone" name="phone" placeholder="Ex :azerty123">
+                                        <input type="text" id="p-phone" name="p-phone" placeholder="Ex :azerty123">
                                     </div>
                                 </div>
                             </div>
@@ -213,7 +225,7 @@
 
     </div>
     <script>
-        document.getElementById('image').addEventListener('change', function () {
+        document.getElementById('file').addEventListener('change', function () {
             var fileName = this.value.split('\\').pop();
             document.getElementById('fileInput').value = fileName;
         });
@@ -231,13 +243,86 @@
             var selectElement = document.getElementById("role");
             var selectedValue = selectElement.value;
             var hiddenElement = document.getElementById("sal-phone");
+            var hiddenElement1 = document.getElementById("sal-email");
             if (selectedValue === "kid") {
                 hiddenElement.style.display = "none";
+                hiddenElement1.style.display = "none";
             } else {
                 hiddenElement.style.display = "flex";
+                hiddenElement1.style.display = "flex";
             }
         }
+        showHideElementPhone()
     </script>
+
+    
+<script>
+  let port;
+
+  async function connect() {
+    try {
+      port = await navigator.serial.requestPort({
+      });
+
+      await port.open({ baudRate: 9600 });
+
+
+      const reader = port.readable.getReader();
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        appendToOutput(new TextDecoder().decode(value));
+      }
+
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  }
+
+  function appendToOutput(message) {
+    const code = document.getElementById('id');
+    if(message){
+      code.value += message;
+    }
+  }
+</script>
+
+
+<script>
+  let port;
+
+  async function connect() {
+    try {
+      port = await navigator.serial.requestPort({
+      });
+
+      await port.open({ baudRate: 9600 });
+
+
+      const reader = port.readable.getReader();
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        appendToOutput(new TextDecoder().decode(value));
+      }
+
+    } catch (error) {
+      console.error('Error: ', error);
+    }
+  }
+
+  function appendToOutput(message) {
+    const code = document.getElementById('code');
+    if(message){
+      code.value += message;
+    }
+  }
+</script>
+
+
+
 </body>
 
 </html>

@@ -1,4 +1,17 @@
+<?php
 
+if (isset($_COOKIE['role'])) {
+    $cookieRole = $_COOKIE['role'];
+} else {
+    header('Location: ' . "./index.html");
+            exit;
+}
+?>
+<?php
+require_once  '../models/classroom.php';
+require_once  '../utils/enums.php';
+require __DIR__ . '/../utils/db-requests.php';
+?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -32,12 +45,14 @@
 
                 <div class="menu-contain">
                     <p class="header">Menu</p>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-users"></i>Members</a></li>
-                        <li><a href="#"><i class="fas fa-calendar-week"></i>Classes</a></li>
-                        <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>
-                        <li class="active"><a href="#"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                        <li><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                    <ul><?php
+                if($cookieRole=="admin"){
+                    echo '<li><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
+                }   ?>
+                        <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
+                        <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
+                        <li class="active"><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
+                        <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
                     </ul>
                 </div>
                 <div class="menu-contain">
@@ -59,46 +74,52 @@
                 </div>
                 <div class="create">
                     <h1>Create New Session:</h1>
-                    <form action="">
+                    <form action="../controllers/session.php" method="post">
                         
                         <div class="options">
                             <label for="classroom">Classroom:</label>
                             <select id="classroom" name="classroom">
-                                <option value="arabic">Arabic</option>
-                                <option value="english">English</option>
-                                <option value="drawin">Drawing</option>
-                                <option value="math">Math</option>
-                                <option value="sport">Sport</option>
+                            <?php
+        $classrooms = Classroom::findWhere('1');
+        foreach ($classrooms as  $classroom) {
+            echo '<option value="'.$classroom->getId().'">'.$classroom->getName().'</option>';
+            }
+            
+        ?>
                             </select>
                         </div>
                         <div class="options">
                             <label for="activity">Activity:</label>
                             <select id="activity" name="activity">
-                                <option value="arabic">Arabic</option>
-                                <option value="english">English</option>
-                                <option value="drawin">Drawing</option>
-                                <option value="math">Math</option>
-                                <option value="sport">Sport</option>
+                            <?php
+         $activities = Activity::values;
+        foreach ( $activities as  $activity) {
+            echo '<option value="'.$activity.'">'.$activity .'</option>';
+            }
+            
+        ?>
                             </select>
                         </div>
 
                         <div class="options">
                             <label for="day">Day:</label>
                             <select id="day" name="day">
-                                <option value="sunday">Sunday</option>
-                                <option value="monday">Monday</option>
-                                <option value="tuesday">Tuesday</option>
-                                <option value="wednesday">Wednesday</option>
-                                <option value="thursday">Thursday</option>
+                            <?php
+         $days = Day::values;
+        foreach ( $days as  $day) {
+            echo '<option value="'.$day.'">'.$day .'</option>';
+            }
+            
+        ?>
                             </select>
                         </div>
                         <div class="input-date">
-                            <label for="start-time">Start Time:</label>
-                            <input type="time" id="start-time" name="start-time" min="08:00" max="18:00" />
+                            <label for="start-at">Start Time:</label>
+                            <input type="time" id="start-at" name="start-at" min="08:00" max="18:00" />
                         </div>
                         <div class="input-date">
-                            <label for="end-time">End Time:</label>
-                            <input type="time" id="end-time" name="end-time" min="08:00" max="18:00" />
+                            <label for="end-at">End Time:</label>
+                            <input type="time" id="end-at" name="end-at" min="08:00" max="18:00" />
                         </div>
 
                         <button class="add-session">Add Session</button>
@@ -108,7 +129,15 @@
                 </div>
                 <div class="persons-list sessions">
                     <div class="details">
-                        <p>Total (<span> 10 </span>)</p>
+
+                        <p>Total (<span>
+                    <?php
+                       $sessions = Select_query("select sessions.id ,name,activity,start_at,end_at,day,sitters.firstName,sitters.lastName,classrooms.level from sessions ,sitters,classrooms where classrooms.sitter=sitters.id and classrooms.id=sessions.classroom;");
+                    echo count($sessions)
+                    ?>        
+                        
+                    
+                    </span>)</p>
 
                         <div class="search">
                             <form action="">
@@ -122,36 +151,42 @@
                     </div>
                     <div class="table">
                         <table class="sessions-table">
+                            
                             <tr>
                                 <th class="id">id</th>
                                 <th class="sitter">Sitter</th>
                                 <th class="activity">Activity</th>
                                 <th class="level">Level</th>
-                                <th class="status">Status</th>
+                                <th class="status">Classroom</th>
                                 <th class="day">Day</th>
                                 <th class="start">StartAt</th>
                                 <th class="end">EndtAt</th>
                             </tr>
-                            <tr class="card">
-                                <td class="id">1</td>
-                                <td class="sitter">Mme Zellat</td>
-                                <td class="activity">sport</td>
-                                <td class="level">A</td>
-                                <td class="status">preparation</td>
-                                <td class="day">sunday</td>
-                                <td class="start">8:00</td>
-                                <td class="end">10:00</td>
-                            </tr>
-                            <tr class="card">
-                                <td class="id">2</td>
-                                <td class="sitter">Mr Iddou</td>
-                                <td class="activity">english</td>
-                                <td class="level">D</td>
-                                <td class="status">Started</td>
-                                <td class="day">sunday</td>
-                                <td class="start">10:00</td>
-                                <td class="end">12:00</td>
-                            </tr>
+
+                            <?php
+
+                             
+                                foreach ($sessions as  $session) {
+                                    
+$startTime = DateTime::createFromFormat('H:i:s', $session["start_at"]);
+$endTime = DateTime::createFromFormat('H:i:s', $session["end_at"]);
+$formattedStartTime = $startTime->format('H:i');
+$formattedEndTime = $endTime->format('H:i');
+
+echo'
+<tr class="card">
+<td class="id">'.$session["id"].'</td>
+<td class="sitter">'.$session["firstName"].' '.$session["lastName"].'</td>
+<td class="activity">'.$session["activity"].'</td>
+<td class="level">'.$session["level"].' </td>
+<td class="classroom">'.$session["name"].'</td>
+<td class="day">'.$session["day"].'</td>
+<td class="start">'.$formattedStartTime.'</td>
+<td class="end">'.$formattedEndTime.'</td>
+</tr>
+';
+                                    }  
+                                ?>
                         </table>
                     </div>
                 </div>

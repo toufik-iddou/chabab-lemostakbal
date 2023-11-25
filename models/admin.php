@@ -29,6 +29,7 @@ class Admin extends Employee
         require __DIR__ . '/../services/connect.php';
         $sql = "INSERT INTO admins ( `firstName`, `lastName`, `address`, `gender`, `birthDate`,`image`,`email`,`phone`, `salary`, `credentialId`)
         VALUES ('".$data['firstName']."','".$data['lastName']."','".$data['address']."','".$data['gender']."','".$data['birthDate']."','".$data['image']."','".$data['email']."','".$data['phone']."','".$data['salary']."',".$data['credentialId'].")";
+        echo $sql;
         $res = $conn->query($sql) ;
         $conn->close();
         return $res=== TRUE;

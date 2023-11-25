@@ -1,3 +1,17 @@
+<?php
+
+if (isset($_COOKIE['role'])) {
+    $cookieRole = $_COOKIE['role'];
+} else {
+    header('Location: ' . "./index.html");
+            exit;
+}
+?>
+<?php
+                        
+    require __DIR__ . '/../utils/db-requests.php';
+    require_once __DIR__ . '/../utils/statics.php';
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,11 +46,15 @@
             <div class="menu-contain">
                 <p class="header">Menu</p>
                 <ul>
-                    <li class="active"><a href="#"><i class="fas fa-users"></i>Members</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-week"></i>Classes</a></li>
-                    <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>
-                    <li><a href="#"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
+<?php
+                if($cookieRole=="admin"){
+                    echo '<li class="active"><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
+                }                
+?>
+                    <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
+                    <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
+                    <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
+                    <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
                 </ul>
             </div>
             <div class="menu-contain">
@@ -52,6 +70,13 @@
         <div class="content">
             <div class="title">
                 <h1>Members</h1>
+                <?php
+                 $counters = Select_query("SELECT 'admins' AS user_type, COUNT(*) AS count FROM admins
+                 UNION
+                 SELECT 'sitters' AS user_type, COUNT(*) AS count FROM sitters
+                 UNION
+                 SELECT 'kids' AS user_type, COUNT(*) AS count FROM kids;");
+                ?>
 
                 <i class="fas fa-cog"></i>
 
@@ -59,23 +84,37 @@
             <div class="stats">
                 <div class="box">
                     <i class="fa-solid fa-children"></i>
-                    <H2>40</H2>
+                    <H2>
+                        <?php
+                        echo $counters[0]["count"];
+                        ?>
+                    </H2>
                     <p>Childrens</p>
                 </div>
                 <div class="box">
                     <i class="fa-solid fa-person-chalkboard"></i>
-                    <H2>5</H2>
+                    <H2>
+                    <?php
+                        echo $counters[1]["count"];
+                        ?>
+                    </H2>
                     <p>Sitters</p>
                 </div>
                 <div class="box">
                     <i class="fa-solid fa-user-secret"></i>
-                    <H2>3</H2>
+                    <H2>
+                    <?php
+                        echo $counters[2]["count"];
+                        ?>
+                    </H2>
                     <p>Admins</p>
                 </div>
             </div>
             <div class="persons-list">
                 <div class="details">
-                    <p>Total (<span> 10 </span>)</p>
+                    <p>Total (<span>    <?php
+                        echo $counters[0]["count"]+$counters[1]["count"]+$counters[2]["count"];
+                        ?> </span>)</p>
 
                     <div class="search">
                         <form action="">
@@ -84,7 +123,7 @@
 
                         </form>
                     </div>
-                    <a href="add-person.html">+</a>
+                    <a href="add-person.php">+</a>
 
                 </div>
                 <div class="table">
@@ -98,24 +137,33 @@
                             <th class="info">info</th>
                             <th class="remove">Remove</th>
                         </tr>
-                        <tr class="card">
-                            <td class="id">1</td>
-                            <td class="image"><img src="./images/avatar.png" alt=""></td>
-                            <td class="name">Anis Boukhannoufa</td>
-                            <td class="role">Admin</td>
 
-                            <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                            <td class="remove"><i class="fa-solid fa-trash"></i></td>
-                        </tr>
-                        <tr class="card">
-                            <td class="id">1</td>
-                            <td class="image"><img src="./images/avatar.png" alt=""></td>
-                            <td class="name">Anis Boukhannoufa</td>
-                            <td class="role">Admin</td>
+                        <?php
+        $users = Select_query("SELECT kids.id ,credentialId ,role, firstName,lastName, image FROM kids JOIN credentials on credentials.id=credentialId
+        UNION
+        SELECT admins.id ,credentialId ,role, firstName,lastName, image FROM admins JOIN credentials on credentials.id=credentialId
+        UNION
+        SELECT sitters.id ,credentialId ,role, firstName,lastName, image FROM sitters JOIN credentials on credentials.id=credentialId
+         ");
+        foreach ($users as  $user) {
+           echo '<tr class="card">
+            <td class="id">'.$user["credentialId"].' </td>
+            <td class="image"><img src="'.$imagesPath.'/'.$user["image"].'" alt=""></td>
+            <td class="name">'.$user["firstName"].' '.$user["lastName"].'</td>
+            <td class="role">'.$user["role"].' </td>
 
-                            <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                            <td class="remove"><i class="fa-solid fa-trash"></i></td>
-                        </tr>
+            <td class="info"><i class="fa-solid fa-circle-info"></i></td>
+            <td class="remove"><i class="fa-solid fa-trash"></i></td>
+        </tr>';
+            }
+            
+        ?>
+
+
+
+                        
+                  
+                       
                     </table>
                 </div>
             </div>

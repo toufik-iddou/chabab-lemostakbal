@@ -1,5 +1,4 @@
 <?php
-require_once  '../models/classroom.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -3,7 +3,7 @@ require_once  '../models/session.php';
 
 function post()
 {
-    
+    require_once __DIR__ . '/../utils/statics.php';
     $classroom = $_POST['classroom'];
     $activity = $_POST['activity'];
     $day = $_POST['day'];
@@ -18,7 +18,7 @@ $data=array(
 );
     Session::create($data);
     echo json_encode(array("status" => 200, "message" => "Class created successfully"));
-    
+    header("Location: $hostLocationViews/sessions.php");
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     post();

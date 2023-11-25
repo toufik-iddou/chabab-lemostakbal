@@ -44,7 +44,7 @@ function post()
     setcookie("credentialId", $cred->getId(), time() + (86400 * 30), "/");
     echo json_encode(array("status" => 200, "message" => "welcome"));
     echo gethostname();
-    header("Location: $hostLocationViews/home.php");
+    header("Location: $hostLocationViews/sessions.php");
     exit;
 
 }

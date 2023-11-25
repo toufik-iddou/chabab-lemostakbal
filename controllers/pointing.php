@@ -15,6 +15,28 @@ function post(){
             echo json_encode(array("status" => 200, "message" => "welcome"));
         }
 }
+
+function get(){
+    $user = $_GET['user'];
+    $currentDate = date('Y-m-d');
+    $data = array(
+        "user" => $user,
+        "date" =>$currentDate,
+    );
+        $isExist = Pointing::exist($data);
+        if($isExist){
+            echo json_encode(array("status" => 200, "message" => "your are already poined"));
+        }else{
+            Pointing::create($data);
+            echo json_encode(array("status" => 200, "message" => "welcome"));
+        }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    get();
+
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     post();
 

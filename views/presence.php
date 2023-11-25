@@ -1,3 +1,12 @@
+<?php
+
+if (isset($_COOKIE['role'])) {
+    $cookieRole = $_COOKIE['role'];
+} else {
+    header('Location: ' . "./index.html");
+            exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,12 +40,14 @@
 
             <div class="menu-contain">
                 <p class="header">Menu</p>
-                <ul>
-                    <li ><a href="#"><i class="fas fa-users"></i>Members</a></li>
-                    <li><a href="#"><i class="fas fa-calendar-week"></i>Classes</a></li>
-                    <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>          
-                    <li><a href="#"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li class="active"><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                <ul><?php
+                if($cookieRole=="admin"){
+                    echo '<li><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
+                }   ?>
+                <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
+                    <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
+                    <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
+                    <li class="active"><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
                 </ul>
             </div>
             <div class="menu-contain">
@@ -76,24 +87,35 @@
                             <th class="class">Date</th>
                             <th class="start-time">Enter Time</th>
                         </tr>
-                        <tr class="card">
-                            <td class="id">1</td>
-                            <td class="image"><img src="./images/avatar.png" alt=""></td>
-                            <td class="name">Anis Boukhannoufa</td>
-                            <td class="role">Admin</td>
-                            <td class="date">25/11/2023</td>
-                            <td class="start-time">8:00</td>
-                        </tr>
-                        
-                        <tr class="card">
-                            <td class="id">1</td>
-                            <td class="image"><img src="./images/avatar.png" alt=""></td>
-                            <td class="name">Anis Boukhannoufa</td>
-                            <td class="role">Admin</td>
-                            <td class="date">25/11/2023</td>
-                            <td class="start-time">8:00</td>
-                        </tr>
-                        
+
+                        <?php
+                         require __DIR__ . '/../utils/db-requests.php';
+                         require_once __DIR__ . '/../utils/statics.php';
+                        $pointings = Select_query("SELECT pointings.id,credentialId,image,pointings.created_at,role,firstName,lastName from pointings,credentials,kids where credentialId=credentials.id and pointings.user=credentialId UNION 
+                        SELECT pointings.id,credentialId,image,pointings.created_at,role,firstName,lastName from pointings,credentials,admins where credentialId=credentials.id and pointings.user=credentialId UNION 
+                        SELECT pointings.id,credentialId,image,pointings.created_at,role,firstName,lastName from pointings,credentials,sitters where credentialId=credentials.id and pointings.user=credentialId;");
+                        foreach ($pointings as $pointing) {
+                            $datetimeString = $pointing["created_at"];
+
+                            $datetime = new DateTime($datetimeString);
+                            $date = $datetime->format('Y-m-d');
+                            $time = $datetime->format('H:i');
+                            echo '
+                            <tr class="card">
+                                <td class="id">' . $pointing["credentialId"] . '</td>
+                                <td class="image"><img src="'.$imagesPath.'/'.$pointing["image"].'" alt=""></td>
+                                <td class="name">' . $pointing["firstName"] . ' ' . $pointing["lastName"] . '</td>
+                                <td class="role">' . $pointing["role"] . '</td>
+                                <td class="date">'.$date.'</td>
+                                <td class="start-time">'.$time.'</td>
+                            </tr>
+                            ';
+                        }
+                        ?>
+
+
+
+
                     </table>
                 </div>
             </div>
