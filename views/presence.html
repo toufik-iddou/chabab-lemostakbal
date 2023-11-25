@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="css/all.min.css">
-    <title>Members</title>
+    <title>Presence</title>
 </head>
 
 <body>
@@ -32,11 +32,11 @@
             <div class="menu-contain">
                 <p class="header">Menu</p>
                 <ul>
-                    <li class="active"><a href="#"><i class="fas fa-users"></i>Members</a></li>
+                    <li ><a href="#"><i class="fas fa-users"></i>Members</a></li>
                     <li><a href="#"><i class="fas fa-calendar-week"></i>Classes</a></li>
-                    <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>
+                    <li><a href="#"><i class="far fa-envelope"></i>Messages</a></li>          
                     <li><a href="#"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                    <li class="active"><a href="#"><i class="fa-solid fa-clock"></i>Presence</a></li>
                 </ul>
             </div>
             <div class="menu-contain">
@@ -51,29 +51,10 @@
         </div>
         <div class="content">
             <div class="title">
-                <h1>Members</h1>
-
+                <h1>Presence:</h1>
                 <i class="fas fa-cog"></i>
-
             </div>
-            <div class="stats">
-                <div class="box">
-                    <i class="fa-solid fa-children"></i>
-                    <H2>40</H2>
-                    <p>Childrens</p>
-                </div>
-                <div class="box">
-                    <i class="fa-solid fa-person-chalkboard"></i>
-                    <H2>5</H2>
-                    <p>Sitters</p>
-                </div>
-                <div class="box">
-                    <i class="fa-solid fa-user-secret"></i>
-                    <H2>3</H2>
-                    <p>Admins</p>
-                </div>
-            </div>
-            <div class="persons-list">
+            <div class="persons-list presence">
                 <div class="details">
                     <p>Total (<span> 10 </span>)</p>
 
@@ -84,38 +65,35 @@
 
                         </form>
                     </div>
-                    <a href="add-person.html">+</a>
-
                 </div>
-                <div class="table">
+                <div class="table presence">
                     <table>
                         <tr>
-                            <th class="id">id</th>
-                            <th class="image">image</th>
+                            <th class="id">Id</th>
+                            <th class="image">Image</th>
                             <th class="name">Name</th>
                             <th class="role">role</th>
-
-                            <th class="info">info</th>
-                            <th class="remove">Remove</th>
+                            <th class="class">Date</th>
+                            <th class="start-time">Enter Time</th>
                         </tr>
                         <tr class="card">
                             <td class="id">1</td>
                             <td class="image"><img src="./images/avatar.png" alt=""></td>
                             <td class="name">Anis Boukhannoufa</td>
                             <td class="role">Admin</td>
-
-                            <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                            <td class="remove"><i class="fa-solid fa-trash"></i></td>
+                            <td class="date">25/11/2023</td>
+                            <td class="start-time">8:00</td>
                         </tr>
+                        
                         <tr class="card">
                             <td class="id">1</td>
                             <td class="image"><img src="./images/avatar.png" alt=""></td>
                             <td class="name">Anis Boukhannoufa</td>
                             <td class="role">Admin</td>
-
-                            <td class="info"><i class="fa-solid fa-circle-info"></i></td>
-                            <td class="remove"><i class="fa-solid fa-trash"></i></td>
+                            <td class="date">25/11/2023</td>
+                            <td class="start-time">8:00</td>
                         </tr>
+                        
                     </table>
                 </div>
             </div>
