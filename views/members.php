@@ -110,7 +110,7 @@ if (isset($_COOKIE['role'])) {
                     <p>Admins</p>
                 </div>
             </div>
-            <div class="persons-list">
+            <div class="persons-list white-layout">
                 <div class="details">
                     <p>Total (<span>    <?php
                         echo $counters[0]["count"]+$counters[1]["count"]+$counters[2]["count"];
@@ -126,7 +126,7 @@ if (isset($_COOKIE['role'])) {
                     <a href="add-person.php">+</a>
 
                 </div>
-                <div class="table">
+                <div class="table white-layout">
                     <table>
                         <tr>
                             <th class="id">id</th>
@@ -139,11 +139,10 @@ if (isset($_COOKIE['role'])) {
                         </tr>
 
                         <?php
-        $users = Select_query("SELECT kids.id ,credentialId ,role, firstName,lastName, image FROM kids JOIN credentials on credentials.id=credentialId
-        UNION
-        SELECT admins.id ,credentialId ,role, firstName,lastName, image FROM admins JOIN credentials on credentials.id=credentialId
-        UNION
-        SELECT sitters.id ,credentialId ,role, firstName,lastName, image FROM sitters JOIN credentials on credentials.id=credentialId
+        $users = Select_query("SELECT kids.id ,credentialId, credentials.created_at ,role, firstName,lastName, image FROM kids JOIN credentials on credentials.id=credentialId UNION 
+        SELECT admins.id ,credentialId,credentials.created_at ,role, firstName,lastName, image FROM admins JOIN credentials on credentials.id=credentialId UNION 
+        SELECT sitters.id ,credentialId,credentials.created_at ,role, firstName,lastName, image FROM sitters JOIN credentials on credentials.id=credentialId
+        ORDER BY created_at DESC;
          ");
         foreach ($users as  $user) {
            echo '<tr class="card">
