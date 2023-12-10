@@ -1,11 +1,5 @@
 <?php
-
-if (isset($_COOKIE['role'])) {
-    $cookieRole = $_COOKIE['role'];
-} else {
-    header('Location: ' . "./index.html");
-            exit;
-}
+require  'midelware.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +28,7 @@ if (isset($_COOKIE['role'])) {
 
             <div class="profile">
                 <a href="#"><i class="far fa-user-circle"></i></a>
-                <p class="username">Admin<br><a href="#" class="view">View Info</a></p>
+                <p class="username"><?php echo $cookieUserName ?><br><a href="#" class="view">View Info</a></p>
                 <a href="#"><i class="fas fa-cog"></i></a>
             </div>
 
@@ -47,7 +41,11 @@ if (isset($_COOKIE['role'])) {
                 <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
                     <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
                     <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li class="active"><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                    <?php
+                    if($cookieRole=="admin"){
+                    echo ' <li  class="active"><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>';
+                }   ?>
+                 
                 </ul>
             </div>
             <div class="menu-contain">

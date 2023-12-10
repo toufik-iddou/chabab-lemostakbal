@@ -474,6 +474,7 @@ a {
 
 
 .login .form-contain form {
+    z-index: 100;
     display: flex;
     flex-direction: column;
     padding: 20px 50px;
@@ -509,6 +510,7 @@ a {
 }
 
 .login .form-contain form input[type=date] ,
+.login .form-contain form input[type=password] ,
 .login .form-contain form input[type=text] {
     width: 100%;
     height: 35px;

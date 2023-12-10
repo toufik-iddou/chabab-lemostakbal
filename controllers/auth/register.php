@@ -133,7 +133,7 @@ $role
     }
 
     echo json_encode(array("status" => 200, "message" => "user created successfully "));
-    // header('Location: ' . "../../views/members.php");
+    header('Location: '  . "../../views/members.php");
     exit;
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
