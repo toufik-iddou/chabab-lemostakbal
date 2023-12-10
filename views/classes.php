@@ -1,13 +1,6 @@
-<?php
 
-if (isset($_COOKIE['role'])) {
-    $cookieRole = $_COOKIE['role'];
-} else {
-    header('Location: ' . "./index.html");
-            exit;
-}
-?>
 <?php
+require  'midelware.php';
 require_once  '../models/sitter.php';
 require_once  '../utils/enums.php';
 require __DIR__ . '/../utils/db-requests.php';
@@ -41,7 +34,7 @@ require __DIR__ . '/../utils/statics.php';
 
             <div class="profile">
                 <a href="#"><i class="far fa-user-circle"></i></a>
-                <p class="username">Admin<br><a href="#" class="view">View Info</a></p>
+                <p class="username"><?php echo $cookieUserName ?><br><a href="#" class="view">View Info</a></p>
                 <a href="#"><i class="fas fa-cog"></i></a>
             </div>
 
@@ -56,7 +49,10 @@ require __DIR__ . '/../utils/statics.php';
                 <li class="active"><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
                     <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
                     <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                    <?php
+                    if($cookieRole=="admin"){
+                    echo ' <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>';
+                }   ?>
                 </ul>
             </div>
             <div class="menu-contain">

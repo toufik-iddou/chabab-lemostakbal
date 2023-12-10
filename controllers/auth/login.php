@@ -14,7 +14,7 @@ function post()
     $cred = Credential::login($userName, $pw);
     if ($cred === null) {
         echo json_encode(array("status" => 400, "message" => "username or password incorrect"));
-        header("Location: $hostLocationViews/login.php");
+        header("Location: $hostLocationViews/login.html");
         exit;
     }
     
@@ -34,7 +34,7 @@ function post()
     }
     if ($user === null) {
         echo json_encode(array("status" => 400, "message" => "unknown user"));
-        header("Location: $hostLocationViews/login.php");
+        header("Location: $hostLocationViews/login.html");
         exit;
     }
     $user->setCredential($cred);

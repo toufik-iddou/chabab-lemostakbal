@@ -1,13 +1,9 @@
+
+
 <?php
-
-if (isset($_COOKIE['role'])) {
-    $cookieRole = $_COOKIE['role'];
-} else {
-    // header('Location: ' . "./index.html");
-            exit;
-}
+require_once  '../models/classroom.php';
+require  'midelware.php';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,7 +31,7 @@ if (isset($_COOKIE['role'])) {
 
             <div class="profile">
                 <a href="#"><i class="far fa-user-circle"></i></a>
-                <p class="username">Admin<br><a href="#" class="view">View Info</a></p>
+                <p class="username"><?php echo $cookieUserName ?><br><a href="#" class="view">View Info</a></p>
                 <a href="#"><i class="fas fa-cog"></i></a>
             </div>
 
@@ -43,14 +39,17 @@ if (isset($_COOKIE['role'])) {
                 <p class="header">Menu</p>
                 <ul>
                 <?php
-                // if($cookieRole=="admin"){
-                    // echo '<li class="active"><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
-                // }
+                if($cookieRole=="admin"){
+                    echo '<li class="active"><a href="./members.php"><i class="fas fa-users"></i>Members</a></li>';
+                }
                 ?>    
                     <li><a href="./classes.php"><i class="fas fa-calendar-week"></i>Classes</a></li>
                     <li><a href="./classes.php"><i class="far fa-envelope"></i>Messages</a></li>
                     <li><a href="./sessions.php"><i class="fa-solid fa-swatchbook"></i>Sessions</a></li>
-                    <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>
+                    <?php
+                    if($cookieRole=="admin"){
+                    echo ' <li><a href="./presence.php"><i class="fa-solid fa-clock"></i>Presence</a></li>';
+                }   ?>
                 </ul>
             </div>
             <div class="menu-contain">
@@ -76,6 +75,19 @@ if (isset($_COOKIE['role'])) {
                 <div class="form-container">
                     <form action="../controllers/auth/register.php" method="post" enctype="multipart/form-data">
                         <div class="part-one">
+                        <div class="role-img">
+                        <div class="role">
+                                    <label for="role">Role:</label>
+                                    <select id="role"  name="role" onchange="
+                                        showHideElementPhone();   
+                                        showHideElement()          
+                                ">
+                                        <option value="admin">Admin</option>
+                                        <option value="sitter">Sitter</option>
+                                        <option value="kid">Kid</option>
+                                    </select>
+                                </div>          
+                                </div>          
                             <div class="name">
                                 <div class="input-field">
                                     <label for="firstName">First Name:</label> <br>
@@ -135,7 +147,7 @@ if (isset($_COOKIE['role'])) {
                                 </div>
                             </div>
                             <div class="name">
-                                <div class="input-field" id="sal-email">
+                                <div class="input-field" id="sal-email" >
                                     <label for="email">Email:</label><br>
                                     <input type="text" id="email" name="email" placeholder="Ex :azerty@gmail.com">
                                 </div>
@@ -144,18 +156,23 @@ if (isset($_COOKIE['role'])) {
                                     <input type="password" id="password" name="password" placeholder="Ex :azerty123">
                                 </div>
                             </div>
+                            
                             <div class="role-img">
-                                <div class="role">
-                                    <label for="role">Role:</label>
-                                    <select id="role"  name="role" onchange="
-                                        showHideElementPhone();   
-                                        showHideElement()          
-                                ">
-                                        <option value="admin">Admin</option>
-                                        <option value="sitter">Sitter</option>
-                                        <option value="kid">Kid</option>
-                                    </select>
-                                </div>
+                                
+                            <div class="options" id="classroom">
+                            <label for="classroom">Classroom:</label>
+                            <select  name="classroom">
+                            <?php
+        $classrooms = Classroom::findWhere('1');
+        foreach ($classrooms as  $classroom) {
+            echo '<option value="'.$classroom->getId().'">'.$classroom->getName().'</option>';
+            }
+            
+        ?>
+                            </select>       
+                        </div>
+
+
                                 <div class="img">
                                     <label for="">Image:</label>
                                     <label for="file" class="custom-file-input">Click to choose</label>
@@ -244,12 +261,15 @@ if (isset($_COOKIE['role'])) {
             var selectedValue = selectElement.value;
             var hiddenElement = document.getElementById("sal-phone");
             var hiddenElement1 = document.getElementById("sal-email");
+            var hiddenElement2 = document.getElementById("classroom");
             if (selectedValue === "kid") {
                 hiddenElement.style.display = "none";
                 hiddenElement1.style.display = "none";
+                hiddenElement2.style.display = "block";
             } else {
                 hiddenElement.style.display = "flex";
-                hiddenElement1.style.display = "flex";
+                hiddenElement1.style.display = "block";
+                hiddenElement2.style.display = "none";
             }
         }
         showHideElementPhone()
